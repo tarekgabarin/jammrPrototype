@@ -1,21 +1,142 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 
+import CheckOptionItemSkill from './CheckOptionItemSkill';
+
+import CheckOptionsItemArt from './CheckOptionItemArt';
+
+
+import {Redirect} from 'react-router-dom';
 
 class Register extends Component {
 
+    //
+    // componentDidUpdate() {
+    //
+    //
+    //     if (window.localStorage.getItem('x-auth') !== null) {
+    //
+    //         return (
+    //
+    //             <Redirect to={'/find'}/>
+    //
+    //
+    //         )
+    //
+    //     }
+    //
+    //
+    // }
+
+    componentDidUpdate() {
+
+        console.log('this.props.usersNearby is....');
+
+        console.log(this.props.usersNearby);
+
+        console.log('this.props.usersNearby.length is...' + this.props.usersNearby.length);
+
+
+
+
+    }
+
+
     render() {
+
+        if (this.props.usersNearby.length > 0) {
+
+            return (
+
+                <Redirect to={'/find'}/>
+
+            )
+
+        }
+
+        // console.log('Below is this.props');
+        //
+        // console.log(this.props);
+
+
+        let inputSkills = [];
+
+        let inputArt = [];
 
 
         let optionsList = [];
 
 
-        for (let i = 18; i < 101; i++){
+        for (let i = 18; i < 101; i++) {
 
             let numVale = `${i}`;
 
-            optionsList.push(<option value={numVale} >{i}</option>)
+            optionsList.push(<option value={numVale}>{i}</option>)
 
         }
+
+
+        let theSkills = ['Acting', 'Drawing', 'Music', 'Writing', 'Programming', 'Videography'].sort();
+
+        let theArts = ['Music', 'Game', 'Film', 'Graphic Novel', 'Youtube Channel'].sort();
+
+        let SkillsOptionsJSX = [];
+
+        let ArtsOptionsJSX = [];
+
+
+        for (let i = 0; i < theSkills.length; i++) {
+
+            if (this.props.skills.indexOf(theSkills[i]) === -1) {
+
+                SkillsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={e => this.props.addSkill(e)} className="form-check-input" type="checkbox"
+                               value={`${theSkills[i]}`}/> {theSkills[i]}
+                    </label>
+                </div>)
+
+            }
+            else {
+
+                SkillsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={e => this.props.removeSkill(e)} className="form-check-input" type="checkbox"
+                               value={`${theSkills[i]}`} checked/> {theSkills[i]}
+                    </label>
+                </div>)
+
+            }
+
+        }
+
+
+        for (let i = 0; i < theArts.length; i++) {
+
+            if (this.props.iWantToMake.indexOf(theArts[i]) === -1) {
+
+                ArtsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={(e) => this.props.addArt(e)} className="form-check-input" type="checkbox"
+                               value={`${theArts[i]}`}/> {theArts[i]}
+                    </label>
+                </div>);
+
+
+            }
+
+            else {
+
+                ArtsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={(e) => this.props.removeArt(e)} className="form-check-input" type="checkbox"
+                               value={`${theArts[i]}`} checked/> {theArts[i]}
+                    </label>
+                </div>)
+
+            }
+
+        }
+
 
         return (
 
@@ -31,126 +152,71 @@ class Register extends Component {
 
                 <h3 className={'mb-3'}> Set your email and password</h3>
 
-                <form>
+                <form onSubmit={(e) => this.props.checkIfAllRegistrationFilled(e)}>
                     <div className="form-group">
-                        <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" className="form-control" id="exampleInputEmail1"
+                        <label htmlFor="exampleInputEmail1">Email address</label>
+                        <input onChange={(e) => this.props.handleEmailInput(e)} type="email" className="form-control"
+                               id="exampleInputEmail1"
                                aria-describedby="emailHelp" placeholder="Enter email"/>
                         <small id="emailHelp" className="form-text text-muted">You can enter a fake email and password
                             to test out this application (i.e. poop@gmail.com).
                         </small>
                     </div>
                     <div className="form-group">
-                        <label for="exampleInputPassword1">Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1"
+                        <label htmlFor="exampleInputPassword1">Password</label>
+                        <input onChange={(e) => this.props.handlePasswordInput(e)} type="password"
+                               className="form-control" id="exampleInputPassword1"
                                placeholder="Password"/>
                     </div>
-
 
 
                     <h3 className={'my-5'}>Personal Info</h3>
 
                     <h5 className={'mb-2'}>I have the following skills...</h5>
 
+                    {SkillsOptionsJSX}
 
-                    <div className="form-check ">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"  value="Acting"/>
-                            Acting
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox" value="Drawing"/>
-                            Drawing
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"  value="Music"/>
-                            Music
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"
-                                   value="Programming"/> Programming
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"
-                                   value="Videography"/> Videography
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"  value="Writing"/>
-                            Writing
-                        </label>
-                    </div>
 
                     <h5 className={'mt-5 mb-2'}>My full name is....</h5>
 
                     <div className="row">
                         <div className="col">
-                            <input type="text" className="form-control" placeholder="First name"/>
+                            <input onChange={(e) => this.props.handleFirstNameInput(e)} type="text"
+                                   className="form-control" placeholder="First name"/>
                         </div>
                         <div className="col">
-                            <input type="text" className="form-control" placeholder="Last name"/>
+                            <input onChange={(e) => this.props.handleLastNameInput(e)} type="text"
+                                   className="form-control" placeholder="Last name"/>
                         </div>
                     </div>
 
 
                     <h5 className={'mt-5 mb-2'}>I want to make a...</h5>
 
-                    <div className="form-check ">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox" value="Graphic Novel"/>
-                            Graphic Novel
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"  value="Game"/>
-                            Game
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox" value="Film"/>
-                            Film
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"
-                                   value="Youtube Channel"/> Youtube Channel
-                        </label>
-                    </div>
-                    <div className="form-check">
-                        <label className="form-check-label">
-                            <input className="form-check-input" type="checkbox"
-                                   value="Music"/> Music
-                        </label>
-                    </div>
+                    {ArtsOptionsJSX}
 
                     <h5 className={'mt-5 mb-2'}>My age is...</h5>
 
-                    <select className="form-control">
+                    <select onChange={(e) => this.props.handleAgeInput(e)} className="form-control">
                         {optionsList}
                     </select>
 
                     <h5 className={'mt-5 mb-2'}>My gender is...</h5>
 
-                    <div className="form-check form-check-inline">
+                    <div onChange={(e) => {
+
+                        this.props.handleGenderInput(e)
+
+                    }} className="form-check form-check-inline">
                         <label className="form-check-label">
-                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="Male"/> Male
+                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Male"
+                                   value="Male"/> Male
                         </label>
                     </div>
-                    <div className="form-check form-check-inline">
+                    <div onChange={(e) => this.props.handleGenderInput(e)} className="form-check form-check-inline">
                         <label className="form-check-label">
-                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Female"/> Female
+                            <input className="form-check-input" type="radio" name="inlineRadioOptions" id="Female"
+                                   value="Female"/> Female
                         </label>
                     </div>
 
@@ -158,17 +224,19 @@ class Register extends Component {
 
                     <div className="row">
                         <div className="col-md-6 mb-3">
-                            <label for="validationCustom03">City</label>
-                            <input type="text" className="form-control" id="validationCustom03" placeholder="City" required/>
-                                <div className="invalid-feedback">
-                                    Please provide a valid city.
-                                </div>
+                            <label htmlFor="validationCustom03">City</label>
+                            <input onChange={(e) => this.props.handleCityInput(e)} type="text" className="form-control"
+                                   id="validationCustom03" placeholder="City" required/>
+                            <div className="invalid-feedback">
+                                Please provide a valid city.
+                            </div>
                         </div>
                         <div className="col-md-3 mb-3">
-                            <label for="validationCustom04">Province</label>
+                            <label htmlFor="validationCustom04">Province</label>
 
-                            <select className="form-control" id={'validationCustom04'}>
-                                <option value={'Ontario'} >Ontario</option>
+                            <select onChange={e => this.props.handleProvinceInput(e)} className="form-control"
+                                    id={'validationCustom04'}>
+                                <option value={'Ontario'}>Ontario</option>
                                 <option value="Quebec">Quebec</option>
                                 <option value="Manitoba">Manitoba</option>
                                 <option value="Saskatchewan">Saskatchewan</option>
@@ -184,31 +252,14 @@ class Register extends Component {
                             </select>
                         </div>
                         <div className="col-md-3 mb-3">
-                            <label for="validationCustom05">Postal Code</label>
-                            <input type="text" className="form-control" id="validationCustom05" placeholder="Postal Code" required/>
-                                <div className="invalid-feedback">
-                                    Please provide a valid zip.
-                                </div>
+                            <label htmlFor="validationCustom05">Address</label>
+                            <input onChange={(e) => this.props.handleAddressInput(e)} type="text"
+                                   className="form-control" id="validationCustom05" placeholder="Address" required/>
+                            <div className="invalid-feedback">
+                                Please provide a valid Address.
+                            </div>
                         </div>
                     </div>
-
-
-                    <h5 className={'mt-5 mb-2'}>Upload your profile pic...</h5>
-
-                    <div className="form-group">
-                        <label for="exampleFormControlFile1">Example file input</label>
-                        <input type="file" className="form-control-file" id="exampleFormControlFile1"/>
-                    </div>
-
-
-
-
-
-
-
-
-
-
 
 
                     <button type="submit" className="mt-5 btn-block btn btn-primary">Submit</button>

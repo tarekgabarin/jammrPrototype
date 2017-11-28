@@ -8,7 +8,7 @@ class ChatBox extends Component {
 
     componentDidMount(){
 
-
+        //// Put socket stuff here
 
     }
 
