@@ -25,37 +25,49 @@ class MessageList extends Component {
 
     render(){
 
-        let MessagesJSX = [];
+        console.log('below is this.props.myId');
 
-        for (let i = 0; i < this.props.messages.length; i++){
+        console.log(this.props.myId);
 
-            if(this.props.messages[i].sentBy === this.props.userId){
+        console.log('below is this.props.messages');
 
-                MessagesJSX.push(<MessageSelf text={this.props.messages[i].text}/>)
+        console.log(this.props.messages);
 
-            }
-            else {
-
-                MessagesJSX.push(<MessageOther text={this.props.messages[i].text} />)
-
-            }
-
-        }
-
-        // let MessagesJSX = this.props.messages.map(function (val) {
+        // let MessagesJSX = [];
         //
-        //     if (val.sentBy === this.props.userId){
+        // for (let i = 0; i < this.props.messages.length; i++){
         //
-        //         return <MessageSelf text={val.text} />
+        //     if(this.props.messages[i].sentBy === this.props.userId){
+        //
+        //         MessagesJSX.push(<MessageSelf text={this.props.messages[i].text}/>)
         //
         //     }
         //     else {
         //
-        //         return <MessageOther text={val.text}/>
+        //         MessagesJSX.push(<MessageOther text={this.props.messages[i].text} />)
         //
         //     }
         //
-        // });
+        // }
+
+        let MessagesJSX = this.props.messages.map((val) => {
+
+            if (val.sentBy === this.props.myId){
+
+                console.log('val.messageSent is...' + val.messageSent);
+
+                return <MessageSelf text={val.messageSent} />
+
+            }
+            else {
+
+                console.log('val.messageSent is...' + val.messageSent);
+
+                return <MessageOther text={val.messageSent}/>
+
+            }
+
+        });
 
 
         return (
@@ -78,7 +90,6 @@ class MessageList extends Component {
                         </div>
 
 
-
                             {MessagesJSX}
 
 
@@ -88,15 +99,7 @@ class MessageList extends Component {
                         </div>
 
 
-
-
                             <div ref={el => { this.el = el; }}></div>
-
-
-
-
-
-
 
                     </div>
 

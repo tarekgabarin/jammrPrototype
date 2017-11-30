@@ -20,6 +20,8 @@ import MessageInput from './MessageInput'
 
 import ChatBox from './ChatBox'
 
+import {Redirect} from 'react-router-dom'
+
 
 class MessageComponent extends Component {
 
@@ -62,6 +64,19 @@ class MessageComponent extends Component {
 
     render() {
 
+        if (this.props.currentConversationId === ""){
+
+            return (
+
+
+                <Redirect to={'/find'}  />
+
+
+            )
+
+
+        }
+
 
 
 
@@ -81,9 +96,9 @@ class MessageComponent extends Component {
 
 
 
-                            <button className="dark-blue burger-icon-style" onClick={this.handleOpen}><span style={{fontSize: '30px', cursor: 'pointer', color: '#ECEFF1'}}>&#9776;</span> </button>
+                            <button className="dark-blue burger-icon-style" onClick={this.props.exitConversation}><span style={{fontSize: '30px', cursor: 'pointer', color: '#ECEFF1'}}>&#xE408;</span> </button>
 
-                            <div className={'mx-auto'}>  <MessageAvatar/>
+                            <div className={'mx-auto'}>  <MessageAvatar conversationOtherUserName={this.props.conversationOtherUserName} conversationOtherUserPic={this.props.conversationOtherUserPic}/>
                             </div>
 
 
@@ -116,12 +131,19 @@ class MessageComponent extends Component {
 
 
 
-                    <ChatBox messages={this.props.messages} userId={this.props.userId}/>
-
-                    <MessageInput className={'fixed-bottom'}/>
-
-
-
+                    <ChatBox
+                             createConversation={this.props.createConversation}
+                             socket={this.props.socket}
+                             getMyInfo={this.props.getMyInfo}
+                             sendMessage={this.props.sendMessage}
+                             myId={this.props.myId}
+                             handleMessageInput={this.props.handleMessageInput}
+                             getMessages={this.props.getMessages}
+                             messages={this.props.messages}
+                             currentConversationId={this.props.currentConversationId}
+                             conversationOtherUserId={this.props.conversationOtherUserId}
+                             conversationOtherUserPic={this.props.conversationOtherUserPic}
+                             messageToSend={this.props.messageToSend} />
 
             </div>
 

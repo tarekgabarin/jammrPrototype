@@ -20,16 +20,38 @@ import Browse from './Browse';
 
 import validator from 'validator';
 
+import {createBrowserHistory as createHistory} from 'history'
+
 
 import SetPreferences from './SetPreferences'
 import IndexPage from "./IndexPage";
 import ChatBox from "./ChatBox";
+
+
+////// NEW CODE ////
+
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:8080');
+
+///////
 
 class App extends Component {
 
     constructor() {
 
         super();
+
+        /// TODO DELETE IF DON"T WORK
+
+        ///  this.history = createHistory();
+
+
+        ///// TODO DFNW
+
+        this.socket = io('http://localhost:8080');
+
+        this.socket.connect();
 
 
         //////  axios.defaults.baseUrl = 'http://localhost:8080';
@@ -55,6 +77,8 @@ class App extends Component {
 
             iWantToMake: [],
 
+            imLookingFor: [],
+
             gender: '',
 
             skills: [],
@@ -77,6 +101,14 @@ class App extends Component {
 
             discoveryPreferences: {},
 
+            lowestDiscoveryAge: 18,
+
+            highestDiscoveryAge: 101,
+
+            discoveryMiles: 100,
+
+            discoveryGender: 'Any',
+
             messageToSend: '',
 
             openNav: true,
@@ -93,17 +125,15 @@ class App extends Component {
 
             conversationOtherUserName: '',
 
-            conversationOtherUserPic: ''
+            conversationOtherUserPic: '',
 
-
-
-
+            messages: []
 
 
         };
 
 
-        if (window.localStorage.getItem('x-auth') !== null) {
+        if (window.sessionStorage.getItem('x-auth') !== null) {
 
             /// TODO PUT THE AWESOME LINE FROM THE OTHER TODO HERE
 
@@ -201,6 +231,43 @@ class App extends Component {
 
         this.createConversation = this.createConversation.bind(this);
 
+        this.getMessages = this.getMessages.bind(this);
+
+        this.handleMessageInput = this.handleMessageInput.bind(this);
+
+        this.sendMessage = this.sendMessage.bind(this);
+
+        this.exitConversation = this.exitConversation.bind(this);
+
+        this.handleNotInterested = this.handleNotInterested.bind(this);
+
+        this.handleDiscoveryGender = this.handleDiscoveryGender.bind(this);
+
+        this.handleDiscoveryLowestAge = this.handleDiscoveryLowestAge.bind(this);
+
+        this.handleDiscoveryMiles = this.handleDiscoveryMiles.bind(this);
+
+        this.handleDiscoveryHighestAge = this.handleDiscoveryHighestAge.bind(this)
+
+
+    }
+
+    handleDiscoveryMiles(event){
+
+        this.setState({discoveryMiles: event.target.value})
+
+
+    }
+
+    handleDiscoveryLowestAge(event){
+
+        this.setState({lowestDiscoveryAge: event.target.value})
+
+    }
+
+    handleDiscoveryHighestAge(event){
+
+        this.setState({highestDiscoveryAge: event.target.value})
 
     }
 
@@ -222,6 +289,23 @@ class App extends Component {
     handleLogOut() {
 
         window.sessionStorage.clear();
+
+    }
+
+    getMessages(messagesFromServer) {
+
+        console.log('this is in getMesages, this is the messageFromServer...' + messagesFromServer);
+
+        this.setState({messages: messagesFromServer})
+
+    }
+
+    handleMessageInput(event) {
+
+        let text_ = event.target.value;
+
+        this.setState({messageToSend: text_});
+
 
     }
 
@@ -255,6 +339,76 @@ class App extends Component {
 
 
     };
+
+    addToLookFor(event){
+
+
+        let lst = this.state.imLookingFor;
+
+        let value = event.target.value;
+
+        if (lst.indexOf(value) === -1) {
+
+            lst.push(value);
+
+        }
+
+        lst = lst.sort();
+
+        this.setState({imLookingFor: lst})
+
+
+    }
+
+    removeToLookFor(event){
+
+        let lst = this.state.imLookingFor;
+
+        let value = event.target.value;
+
+
+        let getIndex = () => {
+
+            let index_;
+
+            return new Promise((resolve, reject) => {
+
+
+                for (let i = 0; i < lst.length; i++) {
+
+                    if (lst[i] === value) {
+
+                        index_ = i
+
+                    }
+                }
+
+                if (index_ !== undefined) {
+
+                    resolve(index_)
+
+                }
+                else {
+
+                    reject('getIndex promise function not working at line 316');
+
+                }
+
+            })
+        };
+
+        getIndex().then(index_ => {
+
+            lst.splice(index_, 1);
+
+            this.setState({imLookingFor: lst});
+
+        });
+
+
+
+
+    }
 
 
     addSkill(event) {
@@ -393,7 +547,7 @@ class App extends Component {
 
     }
 
-    createConversation(userName, userId, userImg){
+    createConversation(userName, userId, userImg) {
 
         console.log('createConversation runs');
 
@@ -415,7 +569,9 @@ class App extends Component {
 
                 });
 
-                console.log(response);
+                console.log('below is response.data in createConversation');
+
+                console.log(response.data);
 
             })
 
@@ -425,6 +581,26 @@ class App extends Component {
 
 
             })
+
+    }
+
+    exitConversation() {
+
+        this.setState({
+
+            currentConversationId: '',
+
+            conversationOtherUserId: '',
+
+            conversationOtherUserName: '',
+
+            conversationOtherUserPic: '',
+
+            messageToSend: ''
+
+
+        })
+
 
     }
 
@@ -472,29 +648,10 @@ class App extends Component {
 
     }
 
+    handleNotInterested(userId) {
 
-    // handleRegistration(){
-    //
-    //     let checkFilledPromise = () => {
-    //
-    //         return new Promise((resolve, reject) => {
-    //
-    //
-    //
-    //
-    //
-    //         })
-    //
-    //
-    //
-    //
-    //     }
-    //
-    //
-    //
-    //
-    //
-    // }
+
+    }
 
 
     handleRegistration() {
@@ -752,6 +909,25 @@ class App extends Component {
 
                 }).then(response => {
 
+                    let genderSetting;
+
+                    if (response.data.discoveryPreferences.gender === ['Male', 'Female']){
+
+                        genderSetting = 'Any'
+                    }
+                    else if (response.data.discoveryPreferences.gender === ['Male']){
+
+                        genderSetting = 'Male'
+
+                    }
+
+                    else if (response.data.discoveryPreferences.gender === ['Female']){
+
+                        genderSetting = 'Female'
+
+                    }
+
+
                     this.setState({
 
 
@@ -776,6 +952,16 @@ class App extends Component {
                         age: response.data.age,
 
                         discoveryPreferences: response.data.discoveryPreferences,
+
+                        lowestDiscoveryAge: response.data.discoveryPreferences.lowestAge,
+
+                        highestDiscoveryAge: response.data.discoveryPreferences.highestAge,
+
+                        discoveryMiles: response.data.discoveryPreferences.miles,
+
+                        imLookingFor: response.data.imLookingFor,
+
+                        discoveryGender: genderSetting,
 
                         currentConversationId: '',
 
@@ -803,7 +989,11 @@ class App extends Component {
 
                         conversationOtherUserName: '',
 
-                        conversationOtherUserPic: ''
+                        conversationOtherUserPic: '',
+
+                        messages: [],
+
+                        navigate: undefined
 
 
                     });
@@ -866,6 +1056,62 @@ class App extends Component {
             this.setState({incorrectForm: true})
 
         }
+
+    }
+
+    sendMessage(userId) {
+
+
+        let message_ = this.state.messageToSend;
+
+        let url = `http://localhost:8080/message/${userId}`;
+
+        axios.post(url, {
+
+            message: message_
+
+        })
+            .then(response => {
+
+                console.log('sendMessage ran, below is response');
+
+                console.log(response.data);
+
+
+                ////   this.setState({currentConversationId: response.data});
+
+
+                /// TODO I added this to maybe this work remove if it fucks up
+
+                ///////      window.location.assign('http://localhost:3000/message')
+
+                // this.context.router.transitionTo()
+
+                /// This is undefined
+                // this.props.history.push("/message");
+
+
+                ////// TODO  DELETEIFNOT
+
+
+
+
+                this.socket.emit('message', this.state.currentConversationId);
+
+                this.socket.on('serverMessages', (messagesReceived) => {
+
+                    console.log('received messages on the front end', messagesReceived);
+
+                    ////    this.getMessages(messagesReceived);
+
+                    this.setState({
+                        messages: messagesReceived
+                    })
+                })
+
+
+            })
+
 
     }
 
@@ -934,6 +1180,12 @@ class App extends Component {
 
     }
 
+    handleDiscoveryGender(event){
+
+        this.setState({discoveryGender: event.target.value})
+
+    }
+
     handleProvinceInput(event) {
 
         this.setState({provinceState: event.target.value})
@@ -999,11 +1251,30 @@ class App extends Component {
 
             }).then(response => {
 
+                console.log('getMyInfo ran ');
 
 
                 ///    console.log(response.config.headers[x-auth]);
 
                 console.log(response);
+
+                let genderSetting;
+
+                if (response.data.discoveryPreferences.gender === ['Male', 'Female']){
+
+                    genderSetting = 'Any'
+                }
+                else if (response.data.discoveryPreferences.gender === ['Male']){
+
+                    genderSetting = 'Male'
+
+                }
+
+                else if (response.data.discoveryPreferences.gender === ['Female']){
+
+                    genderSetting = 'Female'
+
+                }
 
                 this.setState({
 
@@ -1020,6 +1291,8 @@ class App extends Component {
 
                     iWantToMake: response.data.iWantToMake,
 
+                    imLookingFor: response.data.imLookingFor,
+
                     skills: response.data.skills,
 
                     gender: response.data.gender,
@@ -1030,7 +1303,13 @@ class App extends Component {
 
                     discoveryPreferences: response.data.discoveryPreferences,
 
-                    currentConversationId: '',
+                    lowestDiscoveryAge: response.data.discoveryPreferences.lowestAge,
+
+                    highestDiscoveryAge: response.data.discoveryPreferences.highestAge,
+
+                    discoveryMiles: response.data.discoveryPreferences.miles,
+
+                    discoveryGender: genderSetting,
 
                     isEmail: true,
 
@@ -1050,8 +1329,7 @@ class App extends Component {
 
                     myToken: response.config.headers,
 
-                    myLoc: response.data.myLoc
-
+                    myLoc: response.data.myLoc,
 
                 });
 
@@ -1121,9 +1399,13 @@ class App extends Component {
                             return (
 
 
-                                <Browse createConversation={this.createConversation} handleOpen={this.handleOpen} handleClose={this.handleClose} handleLogOut={this.handleLogOut} usersNearby={this.state.usersNearby}
-                                        id={this.state.myId} creationDate={this.state.myCD}
-                                        getAllUsers={this.getAllUsers} isLoggedIn={this.state.isLoggedIn}/>
+                                <Browse
+                                    currentConversationId={this.state.currentConversationId}
+                                    createConversation={this.createConversation} handleOpen={this.handleOpen}
+                                    handleClose={this.handleClose} handleLogOut={this.handleLogOut}
+                                    usersNearby={this.state.usersNearby}
+                                    id={this.state.myId} creationDate={this.state.myCD}
+                                    getAllUsers={this.getAllUsers} isLoggedIn={this.state.isLoggedIn}/>
 
                             )
 
@@ -1165,16 +1447,55 @@ class App extends Component {
                             return (
 
 
-                                <ChatBox currentConversationId={this.state.currentConversationId} messageToSend={this.state.messageToSend}  />
+                                <MessageComponent
+                                    socket={this.socket}
+                                    createConversation={this.createConversation}
+                                    exitConversation={this.exitConversation}
+                                    getMyInfo={this.getMyInfo}
+                                    sendMessage={this.sendMessage}
+                                    myId={this.state.myId}
+                                    handleMessageInput={this.handleMessageInput}
+                                    getMessages={this.getMessages}
+                                    messages={this.state.messages}
+                                    currentConversationId={this.state.currentConversationId}
+                                    conversationOtherUserName={this.state.conversationOtherUserName}
+                                    conversationOtherUserId={this.state.conversationOtherUserId}
+                                    conversationOtherUserPic={this.state.conversationOtherUserPic}
+                                    messageToSend={this.state.messageToSend}/>
 
 
 
                             )
 
 
+                        }}/>
+
+                        <Route path={'/preferences'} render={() => {
 
 
-                        }} />
+                            return (
+
+                                <SetPreferences
+                                                handleDiscoveryGender={this.handleDiscoveryGender}
+                                                handleDiscoveryHighestAge={this.handleDiscoveryHighestAge}
+                                                handleDiscoveryLowestAge={this.handleDiscoveryLowestAge}
+                                                handleDiscoveryMiles={this.handleDiscoveryMiles}
+                                                skills={this.state.skills}
+                                                discoveryMiles={this.state.discoveryMiles}
+                                                arts={this.state.iWantToMake}
+                                                addArt={this.addArt}
+                                                removeArt={this.removeArt}
+                                                addSkill={this.addSkill}
+                                                removeSkill={this.removeSkill}
+
+                                />
+
+
+
+                            )
+
+
+                        }}/>
 
 
                     </Switch>

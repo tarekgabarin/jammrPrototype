@@ -6,6 +6,8 @@ import './MessageInput.css'
 
 import './colors.css'
 
+import {Link} from 'react-router-dom'
+
 class MessageInput extends Component {
 
 
@@ -24,7 +26,7 @@ class MessageInput extends Component {
 
                         <div className="form-group">
 
-                            <textarea id={'noStyle'} placeholder={'Enter text here...'} className="form-control" rows="3"></textarea>
+                            <textarea onChange={(e) => this.props.handleMessageInput(e)} id={'noStyle'} placeholder={'Enter text here...'} className="form-control" rows="3"></textarea>
 
 
 
@@ -43,8 +45,12 @@ class MessageInput extends Component {
                         <button type="button" className="btn pr-2 d-sm-none btn-outline-primary">Send</button>
 
                     <div className="container">
-                        <button type="button" className="btn btn-block d-none d-sm-block btn-outline-primary">Send</button>
+                        <button onClick={() => this.props.sendMessage(this.props.conversationOtherUserId)} type="button" className="btn btn-block d-none d-sm-block btn-outline-primary">Send</button>
 
+
+
+
+                        <button type="button" className="btn btn-block d-none d-sm-block btn-outline-primary">Refresh <Link to='/message'/></button>
                     </div>
 
 

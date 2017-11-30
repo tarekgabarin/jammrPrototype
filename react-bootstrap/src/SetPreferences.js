@@ -24,51 +24,6 @@ import './slider.css'
 
 class SetPreferences extends Component {
 
-    constructor(){
-
-        super();
-
-        this.state = {
-
-            openNav: true,
-
-            showNav: 'message',
-
-            test: 100
-
-        };
-
-        this.handleOpen = this.handleOpen.bind(this);
-
-        this.handleClose = this.handleClose.bind(this);
-
-        this.handleSlider = this.handleSlider.bind(this);
-
-
-    }
-
-    handleOpen(){
-
-        document.getElementById("mySidenav").style.width = "250px";
-
-
-
-    }
-
-    handleClose(){
-
-        document.getElementById("mySidenav").style.width = "0";
-
-
-    }
-
-    handleSlider(event, vale){
-
-       console.log(vale)
-
-        this.setState({test: vale})
-
-    }
 
 
 
@@ -85,6 +40,69 @@ class SetPreferences extends Component {
             optionsLowestAge.push(<option value={numVale} >{i}</option>);
 
             optionsHighestAge.push(<option value={numVale} >{i}</option>);
+
+        }
+
+
+        let theSkills = ['Acting', 'Drawing', 'Music', 'Writing', 'Programming', 'Videography'].sort();
+
+        let theArts = ['Music', 'Game', 'Film', 'Graphic Novel', 'Youtube Channel'].sort();
+
+        let SkillsOptionsJSX = [];
+
+        let ArtsOptionsJSX = [];
+
+
+        for (let i = 0; i < theSkills.length; i++) {
+
+            if (this.props.skills.indexOf(theSkills[i]) === -1) {
+
+                SkillsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={e => this.props.addSkill(e)} className="form-check-input" type="checkbox"
+                               value={`${theSkills[i]}`}/> {theSkills[i]}
+                    </label>
+                </div>)
+
+            }
+            else {
+
+                SkillsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={e => this.props.removeSkill(e)} className="form-check-input" type="checkbox"
+                               value={`${theSkills[i]}`} checked/> {theSkills[i]}
+                    </label>
+                </div>)
+
+            }
+
+        }
+
+
+        for (let i = 0; i < theArts.length; i++) {
+
+            if (this.props.iWantToMake.indexOf(theArts[i]) === -1) {
+
+                ArtsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={(e) => this.props.addArt(e)} className="form-check-input" type="checkbox"
+                               value={`${theArts[i]}`}/> {theArts[i]}
+                    </label>
+                </div>);
+
+
+            }
+
+            else {
+
+                ArtsOptionsJSX.push(<div className="form-check">
+                    <label className="form-check-label">
+                        <input onChange={(e) => this.props.removeArt(e)} className="form-check-input" type="checkbox"
+                               value={`${theArts[i]}`} checked/> {theArts[i]}
+                    </label>
+                </div>)
+
+            }
 
         }
 
@@ -154,7 +172,8 @@ class SetPreferences extends Component {
                             min={100}
                             max={3600}
                             step={100}
-                            onChange={this.handleSlider}
+                            onChange={(e) => this.props.handleDiscoveryMiles(e)}
+
                         />
 
 
@@ -176,42 +195,7 @@ class SetPreferences extends Component {
                             <h4 className={'my-5'}>Search for people with the following skills...</h4>
 
 
-                            <div className="form-check ">
-                                <label className="form-check-label">
-                                    <input className="form-check-input" type="checkbox"  value="Acting"/>
-                                    Acting
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label className="form-check-label">
-                                    <input className="form-check-input" type="checkbox" value="Drawing"/>
-                                    Drawing
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label className="form-check-label">
-                                    <input className="form-check-input" type="checkbox"  value="Music"/>
-                                    Music
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label className="form-check-label">
-                                    <input className="form-check-input" type="checkbox"
-                                           value="Programming"/> Programming
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label className="form-check-label">
-                                    <input className="form-check-input" type="checkbox"
-                                           value="Videography"/> Videography
-                                </label>
-                            </div>
-                            <div className="form-check">
-                                <label className="form-check-label">
-                                    <input className="form-check-input" type="checkbox"  value="Writing"/>
-                                    Writing
-                                </label>
-                            </div>
+                            {SkillsOptionsJSX}
 
                             <h4 className={'my-5'}>Search for people who want to make a...</h4>
 

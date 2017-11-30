@@ -14,6 +14,8 @@ class UsersList extends Component {
 
             console.log('user.username is....' + user.username);
 
+            console.log('user.profilePic is...' + user.profilePic)
+
             return (
 
                 <UserCard createConversation={this.props.createConversation} userId={user._id} usersPic={user.profilePic} userName={user.username} usersArts={user.iWantToMake} usersFirstName={user.firstName} usersLastName={user.lastName} usersSkills={user.skills} usersAge={user.age} usersCity={user.city}  />

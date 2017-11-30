@@ -104,62 +104,72 @@ class Browse extends Component {
 
         }
 
-        if (this.state.currentConversationId !== '' && this.state.conversationOtherUserId !== "" && this.state.conversationOtherUserPic !== ""){
+        else if (this.props.currentConversationId !== '') {
 
 
+            return (
 
+                <Redirect to={'/message'}/>
+
+
+            )
 
         }
 
+        else {
 
-        return (
+            return (
 
-            <section>
-
-
-                <nav className={"navbar dark-blue d-flex flex-row navbar-inverse bg-faded"}>
+                <section>
 
 
-                    <button className="dark-blue burger-icon-style" onClick={ () => this.props.handleOpen()}><span
-                        style={{fontSize: '30px', cursor: 'pointer', color: '#ECEFF1'}}>&#9776;</span></button>
+                    <nav className={"navbar dark-blue d-flex flex-row navbar-inverse bg-faded"}>
 
-                    <div className={'mx-auto navbar-brand'}>
-                        Jammr
+
+                        <button className="dark-blue burger-icon-style" onClick={() => this.props.handleOpen()}><span
+                            style={{fontSize: '30px', cursor: 'pointer', color: '#ECEFF1'}}>&#9776;</span></button>
+
+                        <div className={'mx-auto navbar-brand'}>
+                            Jammr
+                        </div>
+
+
+                        <div className="d-flex justify-content-end">
+                            <span>End</span>
+
+                        </div>
+
+
+                    </nav>
+
+
+                    <div id="mySidenav" className="sidenav">
+                        <a href="javascript:void(0)" className="closebtn"
+                           onClick={() => this.props.handleClose()}>&times;</a>
+                        <a onClick={() => this.props.handleLogOut()} href="#">Log Out</a>
+                        <a href="#">Services</a>
+                        <a href="#">Clients</a>
+                        <a href="#">Contact</a>
                     </div>
 
+                    <div onClick={this.handleClose} id="main">
 
-                    <div className="d-flex justify-content-end">
-                        <span>End</span>
+
+                        <UsersList createConversation={this.props.createConversation}
+                                   usersNearby={this.props.usersNearby}/>
+
 
                     </div>
 
-
-                </nav>
-
-
-                <div id="mySidenav" className="sidenav">
-                    <a href="javascript:void(0)" className="closebtn" onClick={() => this.props.handleClose ()}>&times;</a>
-                    <a onClick={() => this.handleLogOut()} href="#">Log Out</a>
-                    <a href="#">Services</a>
-                    <a href="#">Clients</a>
-                    <a href="#">Contact</a>
-                </div>
-
-                <div onClick={this.handleClose} id="main">
-
-
-                    <UsersList createConversation={this.props.createConversation} usersNearby={this.props.usersNearby}/>
-
-
-                </div>
-
-            </section>
+                </section>
 
 
 
 
-        )
+            )
 
+
+        }
 
     }
 
