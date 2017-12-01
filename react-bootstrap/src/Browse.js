@@ -147,9 +147,6 @@ class Browse extends Component {
                         <a href="javascript:void(0)" className="closebtn"
                            onClick={() => this.props.handleClose()}>&times;</a>
                         <a onClick={() => this.props.handleLogOut()} href="#">Log Out</a>
-                        <a href="#">Services</a>
-                        <a href="#">Clients</a>
-                        <a href="#">Contact</a>
                     </div>
 
                     <div onClick={this.handleClose} id="main">

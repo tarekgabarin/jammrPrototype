@@ -83,11 +83,6 @@ class Login extends Component {
                                 </div>
                             </div>
                             <div className="col-md-3">
-                                <div className="form-control-feedback">
-                        <span className="text-danger align-middle">
-                            <i className="fa fa-close"></i> Example error message
-                        </span>
-                                </div>
                             </div>
                         </div>
                         <div className="row">
