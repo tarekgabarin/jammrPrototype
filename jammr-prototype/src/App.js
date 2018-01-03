@@ -32,7 +32,7 @@ import ChatBox from "./ChatBox";
 
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:8080');
+const socket = io('https://jammr-backend.herokuapp.com');
 
 ///////
 
@@ -49,7 +49,7 @@ class App extends Component {
 
         ///// TODO DFNW
 
-        this.socket = io('http://localhost:8080');
+        this.socket = io('https://jammr-backend.herokuapp.com');
 
         this.socket.connect();
 
@@ -551,7 +551,7 @@ class App extends Component {
 
         console.log('createConversation runs');
 
-        let url = `http://localhost:8080/message/${userId}`;
+        let url = `https://jammr-backend.herokuapp.com/message/${userId}`;
 
         axios.get(url)
 
@@ -657,7 +657,7 @@ class App extends Component {
     handleRegistration() {
 
 
-        axios.post('http://localhost:8080/register',
+        axios.post('https://jammr-backend.herokuapp.com/register',
 
             {
                 email: this.state.email,
@@ -728,7 +728,7 @@ class App extends Component {
                     ////    window.location.assign('http://localhost:3000/find');
 
 
-                    axios.get('http://localhost:8080/find')
+                    axios.get('https://jammr-backend.herokuapp.com/find')
 
                         .then(response => {
 
@@ -838,7 +838,7 @@ class App extends Component {
         event.preventDefault();
 
 
-        axios.post('http://localhost:8080/login', {
+        axios.post('https://jammr-backend.herokuapp.com/login', {
 
             email: this.state.email,
 
@@ -897,7 +897,7 @@ class App extends Component {
 
                 axios({
 
-                    url: 'http://localhost:8080/getMyInfo',
+                    url: 'https://jammr-backend.herokuapp.com/getMyInfo',
 
                     method: 'get',
 
@@ -1064,7 +1064,7 @@ class App extends Component {
 
         let message_ = this.state.messageToSend;
 
-        let url = `http://localhost:8080/message/${userId}`;
+        let url = `https://jammr-backend.herokuapp.com/message/${userId}`;
 
         axios.post(url, {
 
@@ -1124,7 +1124,7 @@ class App extends Component {
         console.log('myCD is....');
 
 
-        axios.get('http://localhost:8080/find').then(response => {
+        axios.get('https://jammr-backend.herokuapp.com/find').then(response => {
 
             console.log("/find ran and it's response is below");
 

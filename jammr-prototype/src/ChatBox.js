@@ -6,7 +6,7 @@ import MessageList from './MessageList'
 
 import io from 'socket.io-client';
 //
-const socket = io('http://localhost:8080');
+const socket = io('https://jammr-backend.herokuapp.com');
 
 class ChatBox extends Component {
 
@@ -49,7 +49,7 @@ class ChatBox extends Component {
 
     }
 
-    
+
 
     // componentWillReceiveProps(nextProps){
     //

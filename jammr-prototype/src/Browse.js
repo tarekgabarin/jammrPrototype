@@ -19,73 +19,21 @@ import {Nav, NavItem, NavLink} from 'reactstrap';
 class Browse extends Component {
 
 
-    ////  this.props.getAllUsers();
 
-
-    // constructor(props){
-    //
-    //     super(props);
-    //
-    //
-    //     console.log('Below is props in Browse component');
-    //
-    //
-    //     console.log(this.props);
-    //
-    //
-    //     this.props.getAllUsers();
-    //
-    //
-    //
-    //
-    // }
-
-    // componentWillMount(){
-    //
-    //     this.props.getAllUsers(this.props.id, this.props.creationDate);
-    //
-    // }
-
-    // componentWillMount(){
-    //
-    //     axios.get('http://localhost:8080/find')
-    //
-    //         .then(response => {
-    //
-    //
-    //             this.setState({usersNearby: response.data});
-    //
-    //
-    //
-    //         })
-    //
-    //         .catch(err => {
-    //
-    //             if (err) throw err;
-    //
-    //         });
-    //
-    //
-    //
-    // }
 
 
     componentDidMount() {
 
 
-        // !!!!!!! FOR THE DEMO APPROACH !!!!!!! //////////
 
-        ////// this.props.getAllUsers(this.props.id, this.props.creationDate);
 
         console.log('usersNearby in Browse is .....[See Below console.log]');
 
-        ///   console.log(this.props.getAllUsers);
+
 
         console.log(this.props.usersNearby);
 
-        ///    console.log(this.props.id);
 
-        ///    console.log(this.props.creationDate);
 
 
     }
